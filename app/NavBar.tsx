@@ -1,6 +1,7 @@
 'use client';
 
 import { Container, Flex } from '@radix-ui/themes';
+import Link from 'next/link';
 import React from 'react';
 
 
@@ -11,7 +12,7 @@ const NavBar = () => {
         <Flex justify="between" align="center">
           <div>Top Left</div>
           <div>Center</div>
-          <div>Top Right</div>
+          <Link href="/api/auth/signin">Login</Link>
         </Flex>
       </Container>
     </nav>
