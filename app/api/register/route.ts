@@ -10,7 +10,7 @@ const schema = z.object({
 });
 
 export async function POST(request: NextRequest) {
-  // This endpoint is used by NextAuth to register a new user, including forms
+  // This endpoint is used by NextAuth to register a new user, including forms.
   const body = await request.json();
 
   const validation = schema.safeParse(body);

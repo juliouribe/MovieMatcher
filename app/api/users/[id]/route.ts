@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import schema from "../schema";
 import prisma from "@/prisma/client";
 
+// The POST request is handled in the register route.
+
 export async function GET(
   request: NextRequest,
   { params }: { params: { id: string } }) {

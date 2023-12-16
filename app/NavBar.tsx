@@ -30,6 +30,9 @@ const UserStatus = () => {
   const handleLogout = () => {
     router.push("/api/auth/signout")
   }
+  const handleSignup = () => {
+    router.push("/api/auth/signup")
+  }
 
   return (
     <Box>
@@ -39,9 +42,14 @@ const UserStatus = () => {
         </Button>
       )}
       {status === "unauthenticated" && (
-        <Button onClick={handleLogin} className="hover:cursor-pointer">
-          Login
-        </Button>
+        <Flex gap="2">
+          <Button onClick={handleSignup} className="hover:cursor-pointer" variant="outline">
+            Signup
+          </Button>
+          <Button onClick={handleLogin} className="hover:cursor-pointer">
+            Login
+          </Button>
+        </Flex>
       )}
       {status === "loading" && (
         <Skeleton width="2em" />
