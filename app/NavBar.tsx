@@ -3,6 +3,7 @@
 import { Skeleton } from "@/app/components";
 import { Box, Button, Flex } from "@radix-ui/themes";
 import { useSession } from "next-auth/react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 const NavBar = () => {
@@ -11,7 +12,7 @@ const NavBar = () => {
     <nav className="border-b mb-5 px-5 py-3">
         <Flex justify="between" align="center">
           <div>Top Left</div>
-          <div>Center</div>
+          <Link href="/">Home</Link>
           <UserStatus />
         </Flex>
     </nav>
