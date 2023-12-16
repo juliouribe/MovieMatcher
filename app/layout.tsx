@@ -3,7 +3,7 @@ import "./theme-config.css";
 import './globals.css';
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
-import { Container, Theme } from '@radix-ui/themes';
+import { Theme } from '@radix-ui/themes';
 import NavBar from './NavBar';
 import AuthProvider from './auth/Provider';
 
@@ -28,8 +28,8 @@ export default function RootLayout({
         <AuthProvider>
           <Theme accentColor="violet" appearance="dark">
             <NavBar />
-            <main className="p-5">
-              <Container>{children}</Container>
+            <main>
+              {children}
             </main>
           </Theme>
         </AuthProvider>

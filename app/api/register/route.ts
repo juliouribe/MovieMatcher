@@ -2,18 +2,15 @@ import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import prisma from "@/prisma/client";
 import bcrypt from "bcrypt";
+import { userSchema } from "@/app/validationSchemas";
 
-const schema = z.object({
-  name: z.string().min(3),
-  email: z.string().email(),
-  password: z.string().min(8),
-});
+
 
 export async function POST(request: NextRequest) {
   // This endpoint is used by NextAuth to register a new user, including forms.
   const body = await request.json();
 
-  const validation = schema.safeParse(body);
+  const validation = userSchema.safeParse(body);
   if (!validation.success)
     return NextResponse.json(validation.error.errors, { status: 400 });
 
