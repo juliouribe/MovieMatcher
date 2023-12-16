@@ -6,7 +6,7 @@ export async function GET(
   request: NextRequest,
   { params }: { params: { id: string } }) {
   const user = await prisma.user.findUnique({
-    where: { id: parseInt(params.id) }
+    where: { id: params.id }
   });
 
   if (!user) {
@@ -29,7 +29,7 @@ export async function PUT(
   // if user doesn't exist return 404
 
   const user = await prisma.user.findUnique({
-    where: { id: parseInt(params.id) }
+    where: { id: params.id }
   })
 
   if (!user)
