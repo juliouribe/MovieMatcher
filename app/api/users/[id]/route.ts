@@ -51,7 +51,7 @@ export async function DELETE(
   request: NextRequest,
   { params }: { params: { id: string } }) {
   const user = await prisma.user.findUnique({
-    where: { id: parseInt(params.id) }
+    where: { id: params.id }
   })
 
   // Fetch the user, return 404 if not found
