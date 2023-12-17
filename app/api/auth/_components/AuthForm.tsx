@@ -1,7 +1,7 @@
 "use client";
 
 import React from 'react'
-import { z } from 'zod'
+import { set, z } from 'zod'
 import { userSchema } from '@/app/validationSchemas'
 import { Button, Callout, Flex, TextField } from '@radix-ui/themes';
 import { Controller, useForm } from 'react-hook-form';
@@ -9,6 +9,8 @@ import { useRouter } from 'next/navigation';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useState } from 'react';
 import axios from 'axios';
+import Spinner from '@/app/components/Spinner';
+
 
 type AuthFormData = z.infer<typeof userSchema>;
 
@@ -24,16 +26,19 @@ const AuthForm = () => {
     },
     resolver: zodResolver(userSchema)
   });
-  const [authError, setAuthError] = useState<string | null>(null);
+  // Always propagates user exists error when we might have other issues.
+  const [authError, setAuthError] = useState<string>('');
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
   const onSubmit = handleSubmit(async (data: AuthFormData) => {
     try {
+      setIsSubmitting(true);
       await axios.post('/api/register', data);
       router.push('/');
       router.refresh();
     } catch (error) {
-      setAuthError("An error occurred while signing up.");
+      setIsSubmitting(false);
+      setAuthError("User already exists with that email.");
     }
   })
 
@@ -43,6 +48,9 @@ const AuthForm = () => {
         <Callout.Text>{errors.name?.message}</Callout.Text>
         <Callout.Text>{errors.email?.message}</Callout.Text>
         <Callout.Text>{errors.password?.message}</Callout.Text>
+      </Callout.Root>}
+      {authError && <Callout.Root color="red" className='mb-5 max-w-xl w-full'>
+        <Callout.Text>{authError}</Callout.Text>
       </Callout.Root>}
       <form className="max-w-xl w-full" onSubmit={onSubmit}>
         <Flex direction="column" gap="4">
@@ -70,7 +78,10 @@ const AuthForm = () => {
               {...register("password", { required: true, minLength: 3 })}
             />
           </label>
-          <Button type="submit" className="m-1">Submit</Button>
+          <Button type="submit" className="m-1">
+            Submit
+            {isSubmitting && <Spinner />}
+          </Button>
         </Flex>
       </form>
     </div>
