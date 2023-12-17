@@ -17,6 +17,7 @@ const AuthForm = () => {
     register, handleSubmit, control, formState: { errors }
   } = useForm<AuthFormData>({
     defaultValues: {
+      name: '',
       email: '',
       password: ''
     },
@@ -25,80 +26,77 @@ const AuthForm = () => {
   const [authError, setAuthError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
-  const onSubmit = async (data: AuthFormData) => {
-    try {
-      const res = await fetch('/api/auth/signup', {
-        method: 'POST',
-        body: JSON.stringify(data),
-        headers: {
-          'Content-Type': 'application/json'
-        },
-      });
-      const json = await res.json();
-      if (!res.ok) throw new Error(json.message);
-      router.push('/api/auth/signin');
-    } catch (error: any) {
-      setAuthError(error.message);
-    }
-  }
-
+  console.log(errors);
+  const onSubmit = handleSubmit(async (data: AuthFormData) => {
+    console.log(data);
+    // try {
+    //   const res = await fetch('/api/auth/signup', {
+    //     method: 'POST',
+    //     body: JSON.stringify(data),
+    //     headers: {
+    //       'Content-Type': 'application/json'
+    //     },
+    //   });
+    //   const json = await res.json();
+    //   if (!res.ok) throw new Error(json.message);
+    //   router.push('/api/auth/signin');
+    // } catch (error) {
+    //   setAuthError("An error occurred while signing up.");
+    // }
+  })
 
   return (
-    <div className="flex justify-center">
-      <form className="max-w-xl w-full">
+    <div className="flex flex-col items-center">
+      {Object.keys(errors).length > 0 && <Callout.Root color="red" className='mb-5 max-w-xl w-full'>
+        <Callout.Text>{errors.name?.message}</Callout.Text>
+        <Callout.Text>{errors.email?.message}</Callout.Text>
+        <Callout.Text>{errors.password?.message}</Callout.Text>
+      </Callout.Root>}
+      <form className="max-w-xl w-full" onSubmit={onSubmit}>
         <Flex direction="column" gap="4">
-          <label htmlFor="Name">Name
+          <label>Full Name
             <Controller
               control={control}
-              name="name"
-              render={({ field: { onChange, onBlur, value, ref } }) => (
+              {...register("name", { required: true, minLength: 3, maxLength: 80 })}
+              render={({ field }) => (
                 <TextField.Input
                   type="text"
                   placeholder="Name"
-                  className="mb-2"
-                  value={value}
-                  onChange={onChange}
-                  onBlur={onBlur}
-                  ref={ref}
+                  className="m-1"
+                  {...field}
                 />
               )}
             />
           </label>
-          <label htmlFor="email">Email
+          <label>Email
             <Controller
               control={control}
-              name="email"
-              render={({ field: { onChange, onBlur, value, ref } }) => (
+              {...register("email", { required: true, minLength: 3 })}
+              render={({ field }) => (
                 <TextField.Input
                   type="email"
                   placeholder="Email"
-                  className="mb-2"
-                  value={value}
-                  onChange={onChange}
-                  onBlur={onBlur}
-                  ref={ref}
+                  className="m-1"
+                  {...field}
                 />
               )}
             />
           </label>
-          <label htmlFor="password">Password
+          <label>Password
             <Controller
               control={control}
-              name="password"
-              render={({ field: { onChange, onBlur, value, ref } }) => (
+              {...register("password", { required: true, minLength: 8 })}
+              render={({ field }) => (
                 <TextField.Input
                   type="password"
                   placeholder="Password"
-                  className="mb-2"
-                  value={value}
-                  onChange={onChange}
-                  onBlur={onBlur}
-                  ref={ref}
+                  className="m-1"
+                  {...field}
                 />
               )}
             />
           </label>
-          <Button type="submit" className="mb-2">Submit</Button>
+          <Button type="submit" className="m-1">Submit</Button>
         </Flex>
       </form>
     </div>
