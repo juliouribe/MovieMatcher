@@ -28,21 +28,20 @@ const AuthForm = () => {
 
   console.log(errors);
   const onSubmit = handleSubmit(async (data: AuthFormData) => {
-    console.log(data);
-    // try {
-    //   const res = await fetch('/api/auth/signup', {
-    //     method: 'POST',
-    //     body: JSON.stringify(data),
-    //     headers: {
-    //       'Content-Type': 'application/json'
-    //     },
-    //   });
-    //   const json = await res.json();
-    //   if (!res.ok) throw new Error(json.message);
-    //   router.push('/api/auth/signin');
-    // } catch (error) {
-    //   setAuthError("An error occurred while signing up.");
-    // }
+    try {
+      const res = await fetch('/api/register', {
+        method: 'POST',
+        body: JSON.stringify(data),
+        headers: {
+          'Content-Type': 'application/json'
+        },
+      });
+      const json = await res.json();
+      if (!res.ok) throw new Error(json.message);
+      router.push('/');
+    } catch (error) {
+      setAuthError("An error occurred while signing up.");
+    }
   })
 
   return (

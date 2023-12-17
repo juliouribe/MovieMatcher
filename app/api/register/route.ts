@@ -4,8 +4,6 @@ import prisma from "@/prisma/client";
 import bcrypt from "bcrypt";
 import { userSchema } from "@/app/validationSchemas";
 
-
-
 export async function POST(request: NextRequest) {
   // This endpoint is used by NextAuth to register a new user, including forms.
   const body = await request.json();
