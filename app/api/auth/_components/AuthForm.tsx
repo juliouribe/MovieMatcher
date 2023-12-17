@@ -8,6 +8,7 @@ import { Controller, useForm } from 'react-hook-form';
 import { useRouter } from 'next/navigation';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useState } from 'react';
+import axios from 'axios';
 
 type AuthFormData = z.infer<typeof userSchema>;
 
@@ -26,19 +27,11 @@ const AuthForm = () => {
   const [authError, setAuthError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
-  console.log(errors);
   const onSubmit = handleSubmit(async (data: AuthFormData) => {
     try {
-      const res = await fetch('/api/register', {
-        method: 'POST',
-        body: JSON.stringify(data),
-        headers: {
-          'Content-Type': 'application/json'
-        },
-      });
-      const json = await res.json();
-      if (!res.ok) throw new Error(json.message);
+      await axios.post('/api/register', data);
       router.push('/');
+      router.refresh();
     } catch (error) {
       setAuthError("An error occurred while signing up.");
     }
@@ -54,45 +47,27 @@ const AuthForm = () => {
       <form className="max-w-xl w-full" onSubmit={onSubmit}>
         <Flex direction="column" gap="4">
           <label>Full Name
-            <Controller
-              control={control}
+            <TextField.Input
+              type="text"
+              placeholder="Name"
+              className="m-1"
               {...register("name", { required: true, minLength: 3, maxLength: 80 })}
-              render={({ field }) => (
-                <TextField.Input
-                  type="text"
-                  placeholder="Name"
-                  className="m-1"
-                  {...field}
-                />
-              )}
             />
           </label>
           <label>Email
-            <Controller
-              control={control}
+            <TextField.Input
+              type="email"
+              placeholder="Email"
+              className="m-1"
               {...register("email", { required: true, minLength: 3 })}
-              render={({ field }) => (
-                <TextField.Input
-                  type="email"
-                  placeholder="Email"
-                  className="m-1"
-                  {...field}
-                />
-              )}
             />
           </label>
           <label>Password
-            <Controller
-              control={control}
-              {...register("password", { required: true, minLength: 8 })}
-              render={({ field }) => (
-                <TextField.Input
-                  type="password"
-                  placeholder="Password"
-                  className="m-1"
-                  {...field}
-                />
-              )}
+            <TextField.Input
+              type="password"
+              placeholder="Password"
+              className="m-1"
+              {...register("password", { required: true, minLength: 3 })}
             />
           </label>
           <Button type="submit" className="m-1">Submit</Button>
