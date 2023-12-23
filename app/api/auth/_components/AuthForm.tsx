@@ -11,7 +11,6 @@ import { useState } from 'react';
 import axios from 'axios';
 import Spinner from '@/app/components/Spinner';
 
-
 type AuthFormData = z.infer<typeof userSchema>;
 
 interface Props {

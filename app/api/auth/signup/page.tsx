@@ -3,7 +3,7 @@ import AuthForm from '../_components/AuthForm'
 
 const SignupPage = () => {
   return (
-    <AuthForm />
+    <AuthForm signup={true} />
   )
 }
 
