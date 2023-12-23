@@ -80,7 +80,8 @@ const AuthForm = () => {
               />
             </label>
             <Button type="submit" className="m-1">
-              Submit
+              51  `````
+              `
               {isSubmitting && <Spinner />}
             </Button>
           </Flex>
