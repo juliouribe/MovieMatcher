@@ -14,7 +14,11 @@ import Spinner from '@/app/components/Spinner';
 
 type AuthFormData = z.infer<typeof userSchema>;
 
-const AuthForm = () => {
+interface Props {
+  signup: boolean
+}
+
+const AuthForm = ({ signup }: Props) => {
   const router = useRouter();
   const {
     register, handleSubmit, control, formState: { errors }
@@ -33,7 +37,11 @@ const AuthForm = () => {
   const onSubmit = handleSubmit(async (data: AuthFormData) => {
     try {
       setIsSubmitting(true);
-      await axios.post('/api/register', data);
+      if (signup) {
+        await axios.post('/api/register', data);
+      } else {
+        await axios.post('/api/login', data);
+      }
       router.push('/');
       router.refresh();
     } catch (error) {
@@ -46,7 +54,7 @@ const AuthForm = () => {
     <div className="flex flex-col items-center content-center m-auto">
       <Card className="max-w-xl w-full p-5">
         {Object.keys(errors).length > 0 && <Callout.Root color="red" className='mb-5 max-w-xl w-full'>
-          <Callout.Text>{errors.name?.message}</Callout.Text>
+          {signup && (<Callout.Text>{errors.name?.message}</Callout.Text>)}
           <Callout.Text>{errors.email?.message}</Callout.Text>
           <Callout.Text>{errors.password?.message}</Callout.Text>
         </Callout.Root>}
@@ -55,14 +63,14 @@ const AuthForm = () => {
         </Callout.Root>}
         <form className="max-w-xl w-full" onSubmit={onSubmit}>
           <Flex direction="column" gap="4">
-            <label>Full Name
+            {signup && (<label>Full Name
               <TextField.Input
                 type="text"
                 placeholder="Name"
                 className="m-1"
                 {...register("name", { required: true, minLength: 3, maxLength: 80 })}
               />
-            </label>
+            </label>)}
             <label>Email
               <TextField.Input
                 type="email"
@@ -80,8 +88,7 @@ const AuthForm = () => {
               />
             </label>
             <Button type="submit" className="m-1">
-              51  `````
-              `
+              {signup ? "Sign Up" : "Login"}
               {isSubmitting && <Spinner />}
             </Button>
           </Flex>
