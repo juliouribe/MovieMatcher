@@ -60,6 +60,7 @@ const AuthForm = ({ signup }: Props) => {
         {authError && <Callout.Root color="red" className='mb-5 max-w-xl w-full'>
           <Callout.Text>{authError}</Callout.Text>
         </Callout.Root>}
+        <h1 className="text-2xl font-bold mb-5">{signup ? "Sign Up" : "Login"}</h1>
         <form className="max-w-xl w-full" onSubmit={onSubmit}>
           <Flex direction="column" gap="4">
             {signup && (<label>Full Name
